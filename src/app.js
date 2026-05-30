@@ -10,13 +10,8 @@ app.use('/api/auth', authRoutes);
 app.use('/api/posts', postRoutes);
 app.use('/api/posts/:postId/comments', commentRoutes);
 
-// Health check endpoint for monitoring
 app.get('/health', (req, res) => {
-  res.json({ 
-    status: 'UP', 
-    app: 'AskAny',
-    timestamp: new Date() 
-  });
+  res.json({ status: 'UP', app: 'AskAny', timestamp: new Date() });
 });
 
 module.exports = app;

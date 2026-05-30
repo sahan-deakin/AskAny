@@ -1,3 +1,2 @@
 # AskAny - Trivy ignore file
 # Add CVE IDs here to suppress known false positives
-# Example: CVE-2021-XXXXX

@@ -12,20 +12,19 @@ router.post('/register', (req, res) => {
   if (!username || !password)
     return res.status(400).json({ error: 'Username and password required' });
 
+  const existing = db.findUserByUsername(username);
+  if (existing)
+    return res.status(409).json({ error: 'Username already exists' });
+
   const hashed = bcrypt.hashSync(password, 10);
-  try {
-    const stmt = db.prepare('INSERT INTO users (username, password) VALUES (?, ?)');
-    const result = stmt.run(username, hashed);
-    res.status(201).json({ message: 'User registered', userId: result.lastInsertRowid });
-  } catch {
-    res.status(409).json({ error: 'Username already exists' });
-  }
+  const user = db.createUser(username, hashed);
+  res.status(201).json({ message: 'User registered', userId: user.id });
 });
 
 // Login
 router.post('/login', (req, res) => {
   const { username, password } = req.body;
-  const user = db.prepare('SELECT * FROM users WHERE username = ?').get(username);
+  const user = db.findUserByUsername(username);
   if (!user || !bcrypt.compareSync(password, user.password))
     return res.status(401).json({ error: 'Invalid credentials' });
 

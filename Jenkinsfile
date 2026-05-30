@@ -88,7 +88,6 @@ pipeline {
                       --format table \
                       ${DOCKER_IMAGE} | tee trivy-report.txt
                 """
-                echo "Security scan complete. Review trivy-report.txt for findings."
             }
             post {
                 always {
@@ -142,7 +141,7 @@ pipeline {
                 echo "Monitoring stack active:"
                 echo "  Prometheus -> http://localhost:9090"
                 echo "  Grafana    -> http://localhost:3002"
-                echo "  AskAny API -> http://localhost:3001/health"
+                echo "  AskAny     -> http://localhost:3001/health"
             }
         }
     }

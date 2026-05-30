@@ -1,13 +1,5 @@
 version: '3.8'
 
-# AskAny - DevOps Infrastructure
-# Run this FIRST before starting your Jenkins pipeline
-# Access points:
-#   Jenkins    -> http://localhost:8080
-#   SonarQube  -> http://localhost:9000  (admin / admin)
-#   Prometheus -> http://localhost:9090
-#   Grafana    -> http://localhost:3002  (admin / admin)
-
 services:
   jenkins:
     image: jenkins/jenkins:lts
