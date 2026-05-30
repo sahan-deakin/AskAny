@@ -1,5 +1,3 @@
-// simple in-memory store for users, posts and comments
-// data resets when the server restarts - fine for this project
 const store = {
     users: [],
     posts: [],
@@ -40,7 +38,6 @@ const store = {
     },
 
     getAllPosts() {
-        // attach username to each post
         return this.posts.map(p => ({
             ...p,
             username: this.findUserById(p.user_id)?.username
@@ -65,12 +62,31 @@ const store = {
         const index = this.posts.findIndex(p => p.id === id)
         if (index === -1) return false
         this.posts.splice(index, 1)
-        // remove comments belonging to this post too
         this.comments = this.comments.filter(c => c.post_id !== id)
         return true
     },
 
-    // used in tests to reset state between runs
+    createComment(body, userId, postId) {
+        const comment = {
+            id: this._commentId++,
+            body,
+            user_id: userId,
+            post_id: postId,
+            created_at: new Date().toISOString()
+        }
+        this.comments.push(comment)
+        return comment
+    },
+
+    getCommentsByPost(postId) {
+        return this.comments
+            .filter(c => c.post_id === postId)
+            .map(c => ({
+                ...c,
+                username: this.findUserById(c.user_id)?.username
+            }))
+    },
+
     reset() {
         this.users = []
         this.posts = []

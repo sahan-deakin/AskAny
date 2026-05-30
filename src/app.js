@@ -5,9 +5,11 @@ app.use(express.json())
 
 const authRoutes = require('./routes/auth')
 const postRoutes = require('./routes/posts')
+const commentRoutes = require('./routes/comments')
 
 app.use('/api/auth', authRoutes)
 app.use('/api/posts', postRoutes)
+app.use('/api/posts/:postId/comments', commentRoutes)
 
 // health check for monitoring and pipeline verification
 app.get('/health', (req, res) => {
