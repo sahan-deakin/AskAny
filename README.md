@@ -1,6 +1,6 @@
 # AskAny 🙋
 
-> A student help forum API — ask anything, answer anything..
+> A student help forum API — ask anything, answer anything.
 
 AskAny is a REST API where students can post questions and other students can respond via comments. Built with Node.js and Express, and deployed through a fully automated Jenkins CI/CD pipeline...
 
