@@ -1,0 +1,14 @@
+Update your package.json scripts section to this:
+
+"scripts": {
+    "start": "node src/server.js",
+    "dev": "nodemon src/server.js",
+    "test": "echo 'no tests yet' && exit 0",
+    "build": "echo 'AskAny build complete'"
+}
+
+Also add these lines to your .gitignore:
+
+coverage/
+junit.xml
+trivy-report.txt
