@@ -1,0 +1,6 @@
+node_modules/
+coverage/
+junit.xml
+.env
+*.log
+.DS_Store

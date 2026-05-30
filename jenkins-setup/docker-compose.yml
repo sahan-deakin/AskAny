@@ -1,0 +1,65 @@
+version: '3.8'
+
+# AskAny - DevOps Infrastructure
+# Run this FIRST before starting your Jenkins pipeline
+# Access points:
+#   Jenkins    -> http://localhost:8080
+#   SonarQube  -> http://localhost:9000  (admin / admin)
+#   Prometheus -> http://localhost:9090
+#   Grafana    -> http://localhost:3002  (admin / admin)
+
+services:
+  jenkins:
+    image: jenkins/jenkins:lts
+    container_name: askany-jenkins
+    privileged: true
+    user: root
+    ports:
+      - "8080:8080"
+      - "50000:50000"
+    volumes:
+      - jenkins_home:/var/jenkins_home
+      - /var/run/docker.sock:/var/run/docker.sock
+    environment:
+      - DOCKER_HOST=unix:///var/run/docker.sock
+    restart: unless-stopped
+
+  sonarqube:
+    image: sonarqube:community
+    container_name: askany-sonarqube
+    ports:
+      - "9000:9000"
+    environment:
+      - SONAR_ES_BOOTSTRAP_CHECKS_DISABLE=true
+    volumes:
+      - sonar_data:/opt/sonarqube/data
+      - sonar_logs:/opt/sonarqube/logs
+    restart: unless-stopped
+
+  prometheus:
+    image: prom/prometheus
+    container_name: askany-prometheus
+    ports:
+      - "9090:9090"
+    volumes:
+      - ../prometheus.yml:/etc/prometheus/prometheus.yml
+    restart: unless-stopped
+
+  grafana:
+    image: grafana/grafana
+    container_name: askany-grafana
+    ports:
+      - "3002:3000"
+    depends_on:
+      - prometheus
+    environment:
+      - GF_SECURITY_ADMIN_PASSWORD=admin
+    volumes:
+      - grafana_data:/var/lib/grafana
+    restart: unless-stopped
+
+volumes:
+  jenkins_home:
+  sonar_data:
+  sonar_logs:
+  grafana_data:

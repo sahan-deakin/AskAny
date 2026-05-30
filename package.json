@@ -1,0 +1,34 @@
+{
+  "name": "askany",
+  "version": "1.0.0",
+  "description": "AskAny - A student help forum API where anyone can ask and anyone can answer",
+  "main": "src/server.js",
+  "scripts": {
+    "start": "node src/server.js",
+    "dev": "nodemon src/server.js",
+    "test": "jest --coverage --forceExit --runInBand",
+    "build": "echo 'AskAny build complete - version 1.0.0'"
+  },
+  "jest": {
+    "testEnvironment": "node",
+    "reporters": [
+      "default",
+      ["jest-junit", { "outputDirectory": ".", "outputName": "junit.xml" }]
+    ],
+    "collectCoverage": true,
+    "coverageDirectory": "coverage"
+  },
+  "dependencies": {
+    "bcryptjs": "^2.4.3",
+    "better-sqlite3": "^9.4.3",
+    "dotenv": "^16.4.1",
+    "express": "^4.18.2",
+    "jsonwebtoken": "^9.0.2"
+  },
+  "devDependencies": {
+    "jest": "^29.7.0",
+    "jest-junit": "^16.0.0",
+    "nodemon": "^3.0.3",
+    "supertest": "^6.3.4"
+  }
+}
