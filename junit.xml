@@ -1,0 +1,41 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<testsuites name="jest tests" tests="16" failures="0" errors="0" time="4.151">
+  <testsuite name="Posts Routes" errors="0" failures="0" skipped="0" timestamp="2026-05-30T04:28:45" time="3.045" tests="9">
+    <testcase classname="Posts Routes GET /api/posts - returns empty array initially" name="Posts Routes GET /api/posts - returns empty array initially" time="0.3">
+    </testcase>
+    <testcase classname="Posts Routes POST /api/posts - creates a post when logged in" name="Posts Routes POST /api/posts - creates a post when logged in" time="0.223">
+    </testcase>
+    <testcase classname="Posts Routes POST /api/posts - fails without auth" name="Posts Routes POST /api/posts - fails without auth" time="0.207">
+    </testcase>
+    <testcase classname="Posts Routes POST /api/posts - fails without title" name="Posts Routes POST /api/posts - fails without title" time="0.195">
+    </testcase>
+    <testcase classname="Posts Routes GET /api/posts/:id - returns a single post" name="Posts Routes GET /api/posts/:id - returns a single post" time="0.187">
+    </testcase>
+    <testcase classname="Posts Routes GET /api/posts/:id - returns 404 for missing post" name="Posts Routes GET /api/posts/:id - returns 404 for missing post" time="0.176">
+    </testcase>
+    <testcase classname="Posts Routes PUT /api/posts/:id - owner can update post" name="Posts Routes PUT /api/posts/:id - owner can update post" time="0.185">
+    </testcase>
+    <testcase classname="Posts Routes DELETE /api/posts/:id - owner can delete post" name="Posts Routes DELETE /api/posts/:id - owner can delete post" time="0.184">
+    </testcase>
+    <testcase classname="Posts Routes DELETE /api/posts/:id - non-owner cannot delete" name="Posts Routes DELETE /api/posts/:id - non-owner cannot delete" time="0.398">
+    </testcase>
+  </testsuite>
+  <testsuite name="Comments Routes" errors="0" failures="0" skipped="0" timestamp="2026-05-30T04:28:48" time="0.187" tests="1">
+    <testcase classname="Comments Routes placeholder - comment tests coming in next step" name="Comments Routes placeholder - comment tests coming in next step" time="0.001">
+    </testcase>
+  </testsuite>
+  <testsuite name="Auth Routes" errors="0" failures="0" skipped="0" timestamp="2026-05-30T04:28:49" time="0.742" tests="6">
+    <testcase classname="Auth Routes POST /api/auth/register - registers a new user" name="Auth Routes POST /api/auth/register - registers a new user" time="0.103">
+    </testcase>
+    <testcase classname="Auth Routes POST /api/auth/register - fails without username" name="Auth Routes POST /api/auth/register - fails without username" time="0.008">
+    </testcase>
+    <testcase classname="Auth Routes POST /api/auth/register - fails with duplicate username" name="Auth Routes POST /api/auth/register - fails with duplicate username" time="0.097">
+    </testcase>
+    <testcase classname="Auth Routes POST /api/auth/login - returns token on valid credentials" name="Auth Routes POST /api/auth/login - returns token on valid credentials" time="0.176">
+    </testcase>
+    <testcase classname="Auth Routes POST /api/auth/login - fails with wrong password" name="Auth Routes POST /api/auth/login - fails with wrong password" time="0.179">
+    </testcase>
+    <testcase classname="Auth Routes GET /health - returns UP status" name="Auth Routes GET /health - returns UP status" time="0.004">
+    </testcase>
+  </testsuite>
+</testsuites>
