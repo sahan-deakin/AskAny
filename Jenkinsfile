@@ -121,12 +121,20 @@ pipeline {
                 sh "VERSION=${VERSION} docker-compose -f docker-compose.prod.yml up -d"
                 sh 'sleep 15'
                 sh 'curl -f http://host.docker.internal:3001/health || exit 1'
-                sh """
-                    git config user.email "jenkins@askany.com" || true
-                    git config user.name "Jenkins" || true
-                    git tag -a v${VERSION} -m "AskAny Release v${VERSION}" || true
-                    git push origin v${VERSION} || true
-                """
+
+                                withCredentials([usernamePassword(
+                    credentialsId: 'github-credentials',
+                    usernameVariable: 'GIT_USER',
+                    passwordVariable: 'GIT_TOKEN'
+                )]) {
+                    sh """
+                        git config user.email "jenkins@askany.com"
+                        git config user.name "Jenkins"
+                        git remote set-url origin https://\${GIT_USER}:\${GIT_TOKEN}@github.com/\${GIT_USER}/AskAny.git
+                        git tag -a v${VERSION} -m "AskAny Release v${VERSION}" || true
+                        git push origin v${VERSION} || true
+                    """
+                }
                 echo "AskAny v${VERSION} live in production: http://localhost:3001"
             }
         }
