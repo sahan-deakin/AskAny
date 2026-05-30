@@ -13,10 +13,10 @@ pipeline {
 
     stages {
 
-        // ─── STAGE 1: BUILD ───────────────────────────────────────
+        // Stage 1: Build
+        // Install dependencies, run the build script, and create a Docker image
         stage('Build') {
             steps {
-                echo "=========================================="
                 echo " AskAny - Build Stage (v${VERSION})"
                 echo "=========================================="
                 sh 'npm ci'
@@ -27,10 +27,10 @@ pipeline {
             }
         }
 
-        // ─── STAGE 2: TEST ────────────────────────────────────────
+        // Stage 2: Test
+        // Run all automated tests and publish coverage report
         stage('Test') {
             steps {
-                echo "=========================================="
                 echo " AskAny - Test Stage"
                 echo "=========================================="
                 sh 'npm test'
@@ -50,10 +50,10 @@ pipeline {
             }
         }
 
-        // ─── STAGE 3: CODE QUALITY ────────────────────────────────
+        // Stage 3: Code Quality
+        // Run SonarQube analysis and wait for quality gate result
         stage('Code Quality') {
             steps {
-                echo "=========================================="
                 echo " AskAny - Code Quality Stage (SonarQube)"
                 echo "=========================================="
                 withSonarQubeEnv('SonarQube') {
@@ -73,10 +73,11 @@ pipeline {
             }
         }
 
-        // ─── STAGE 4: SECURITY ────────────────────────────────────
+        // Stage 4: Security
+        // Scan the Docker image for known vulnerabilities using Trivy
+        // Results are saved to trivy-report.txt and archived
         stage('Security') {
             steps {
-                echo "=========================================="
                 echo " AskAny - Security Stage (Trivy)"
                 echo "=========================================="
                 sh """
@@ -96,30 +97,30 @@ pipeline {
             }
         }
 
-        // ─── STAGE 5: DEPLOY (STAGING) ────────────────────────────
+        // Stage 5: Deploy to Staging
+        // Stop any running containers, start fresh staging container, wait for it to be ready, then verify health endpoint
         stage('Deploy') {
             steps {
-                echo "=========================================="
                 echo " AskAny - Deploy Stage (Staging)"
                 echo "=========================================="
                 sh 'docker-compose down || true'
                 sh "VERSION=${VERSION} docker-compose up -d --build"
                 sh 'sleep 15'
-                sh 'curl -f http://localhost:3000/health || exit 1'
+                sh 'curl -f http://host.docker.internal:3000/health || exit 1'
                 echo "AskAny deployed to staging: http://localhost:3000"
             }
         }
 
-        // ─── STAGE 6: RELEASE (PRODUCTION) ───────────────────────
+        // Stage 6: Release to Production
+        // Tag the image as a production release, start production container, verify it is healthy, then tag the git commit with a version number
         stage('Release') {
             steps {
-                echo "=========================================="
                 echo " AskAny - Release Stage (Production v${VERSION})"
                 echo "=========================================="
                 sh "docker tag ${DOCKER_IMAGE} ${APP_NAME}:prod-${VERSION}"
                 sh "VERSION=${VERSION} docker-compose -f docker-compose.prod.yml up -d"
                 sh 'sleep 15'
-                sh 'curl -f http://localhost:3001/health || exit 1'
+                sh 'curl -f http://host.docker.internal:3001/health || exit 1'
                 sh """
                     git config user.email "jenkins@askany.com" || true
                     git config user.name "Jenkins" || true
@@ -130,14 +131,15 @@ pipeline {
             }
         }
 
-        // ─── STAGE 7: MONITORING ──────────────────────────────────
+        // Stage 7: Monitoring
+        // Check that Prometheus and Grafana are reachable
+        // These run as separate containers in the jenkins-setup stack
         stage('Monitoring') {
             steps {
-                echo "=========================================="
                 echo " AskAny - Monitoring Stage"
                 echo "=========================================="
-                sh 'curl -f http://localhost:9090/-/healthy || echo "Prometheus running"'
-                sh 'curl -f http://localhost:3002/api/health || echo "Grafana running"'
+                sh 'curl -f http://host.docker.internal:9090/-/healthy || echo "Prometheus running"'
+                sh 'curl -f http://host.docker.internal:3002/api/health || echo "Grafana running"'
                 echo "Monitoring stack active:"
                 echo "  Prometheus -> http://localhost:9090"
                 echo "  Grafana    -> http://localhost:3002"
