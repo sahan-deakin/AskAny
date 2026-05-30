@@ -27,7 +27,50 @@ const store = {
         return this.users.find(u => u.id === id) || null
     },
 
-    // used in tests to reset state between test runs
+    createPost(title, body, userId) {
+        const post = {
+            id: this._postId++,
+            title,
+            body,
+            user_id: userId,
+            created_at: new Date().toISOString()
+        }
+        this.posts.push(post)
+        return post
+    },
+
+    getAllPosts() {
+        // attach username to each post
+        return this.posts.map(p => ({
+            ...p,
+            username: this.findUserById(p.user_id)?.username
+        })).reverse()
+    },
+
+    findPostById(id) {
+        const post = this.posts.find(p => p.id === id) || null
+        if (!post) return null
+        return { ...post, username: this.findUserById(post.user_id)?.username }
+    },
+
+    updatePost(id, title, body) {
+        const post = this.posts.find(p => p.id === id)
+        if (!post) return null
+        if (title) post.title = title
+        if (body) post.body = body
+        return post
+    },
+
+    deletePost(id) {
+        const index = this.posts.findIndex(p => p.id === id)
+        if (index === -1) return false
+        this.posts.splice(index, 1)
+        // remove comments belonging to this post too
+        this.comments = this.comments.filter(c => c.post_id !== id)
+        return true
+    },
+
+    // used in tests to reset state between runs
     reset() {
         this.users = []
         this.posts = []
