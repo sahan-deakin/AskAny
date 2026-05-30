@@ -1,0 +1,17 @@
+{
+  "scripts": {
+    "start": "node src/server.js",
+    "dev": "nodemon src/server.js",
+    "test": "jest --coverage --forceExit --runInBand",
+    "build": "echo 'AskAny build complete'"
+  },
+  "jest": {
+    "testEnvironment": "node",
+    "reporters": [
+      "default",
+      ["jest-junit", { "outputDirectory": ".", "outputName": "junit.xml" }]
+    ],
+    "collectCoverage": true,
+    "coverageDirectory": "coverage"
+  }
+}
